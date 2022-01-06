@@ -206,7 +206,15 @@ export function generateSchema({
           ? getLinkFieldType(field.items.linkType, field, schema, createTypes)
           : translateFieldType(field.items, schema, createTypes)
 
-      fieldType = { ...fieldData, type: `[${fieldData.type}]` }
+      fieldType = {
+        ...fieldData,
+        type: `[${fieldData.type}]`,
+        extensions: {
+          contentfulLocalized: {
+            contentfulFieldId: field.id,
+          },
+        },
+      }
     } else if (field.type === `Link`) {
       // Contentful Link (reference) field types
       fieldType = getLinkFieldType(field.linkType, field, schema, createTypes)
@@ -225,7 +233,7 @@ export function generateSchema({
   // Generic Types
   createTypes(
     schema.buildInterfaceType({
-      name: `ContentfulReference`,
+      name: `ContentfulEntity`,
       fields: {
         id: { type: `ID!` },
         sys: { type: `ContentfulSys!` },
@@ -242,7 +250,7 @@ export function generateSchema({
         sys: { type: `ContentfulSys!` },
         metadata: { type: `ContentfulMetadata!` },
       },
-      interfaces: [`ContentfulReference`, `Node`],
+      interfaces: [`ContentfulEntity`, `Node`],
     })
   )
 
@@ -345,7 +353,7 @@ export function generateSchema({
         height: { type: `Int` },
         fields: { type: `ContentfulAssetFields` },
       },
-      interfaces: [`ContentfulReference`, `Node`],
+      interfaces: [`ContentfulEntity`, `Node`],
       extensions: { dontInfer: {} },
     })
   )
@@ -499,7 +507,7 @@ export function generateSchema({
             metadata: { type: `ContentfulMetadata!` },
             ...fields,
           },
-          interfaces: [`ContentfulReference`, `ContentfulEntry`, `Node`],
+          interfaces: [`ContentfulEntity`, `ContentfulEntry`, `Node`],
           extensions: { dontInfer: {} },
         })
       )

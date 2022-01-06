@@ -838,6 +838,10 @@ function resolveField(
   if (!gqlField?.resolve) {
     return node[fieldName]
   }
+  const { schemaCustomization } = store.getState()
+
+  // console.log({ gqlField, fieldName })
+
   const withResolverContext = require(`./context`)
   return gqlField.resolve(
     node,
@@ -849,11 +853,17 @@ function resolveField(
       schema,
       schemaComposer,
       nodeModel,
+      customContext: schemaCustomization.context,
     }),
     {
       fieldName,
       schema,
       returnType: gqlField.type,
+      // path: {
+      //   prev: undefined,
+      //   key: gqlField.name,
+      //   typename: gqlField.type,
+      // },
     }
   )
 }

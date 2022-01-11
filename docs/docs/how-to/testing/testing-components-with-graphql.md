@@ -44,7 +44,8 @@ describe("Index", () =>
 
 If you run this test you will get an error, as the StaticQuery in the `Layout` component is not mocked. You can fix this by mocking it, like so:
 
-```import React from "react"
+```js:title=src/pages/__tests__/index.js
+import React from "react"
 import renderer from "react-test-renderer"
 import { StaticQuery } from "gatsby"
 import Index from "../pages/index"
@@ -67,7 +68,7 @@ describe("Index", () =>
 ```
 
 Note: if you're component uses useStaticQuery(), the mock query should be the following otherwise the mock data will not be created.
-```
+```js:title=src/pages/__tests__/index.js
 import { useStaticQuery } from "gatsby"
 
 beforeEach(() => {

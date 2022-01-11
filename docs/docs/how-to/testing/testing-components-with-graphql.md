@@ -44,27 +44,41 @@ describe("Index", () =>
 
 If you run this test you will get an error, as the StaticQuery in the `Layout` component is not mocked. You can fix this by mocking it, like so:
 
-```js:title=src/__tests__/index.js
-import React from "react"
+```import React from "react"
 import renderer from "react-test-renderer"
-import { useStaticQuery } from "gatsby"
+import { StaticQuery } from "gatsby"
 import Index from "../pages/index"
-
 beforeEach(() => {
-  useStaticQuery.mockImplementation(() => ({
-    site: {
-      siteMetadata: {
-        title: `Default Starter`,
+  StaticQuery.mockImplementationOnce(({ render }) =>
+    render({
+      site: {
+        siteMetadata: {
+          title: `Default Starter`,
+        },
       },
-    },
-  }))
+    })
+  )
 })
-
 describe("Index", () =>
   it("renders correctly", () => {
     const tree = renderer.create(<Index />).toJSON()
     expect(tree).toMatchSnapshot()
   }))
+```
+
+Note: if you're component uses useStaticQuery(), the mock query should be the following otherwise the mock data will not be created.
+```
+import { useStaticQuery } from "gatsby"
+
+beforeEach(() => {
+  useStaticQuery.mockImplementation(() => ({
+    site: {
+        siteMetadata: {
+          title: `Default Starter`,
+        },
+      },
+  }))
+})
 ```
 
 This should fix the `StaticQuery` error, but in a more real-world example you may also be using a page query with the `graphql` helper from Gatsby. In this case, there is no GraphQL data being passed to the component. You can pass this in too,

@@ -47,19 +47,17 @@ If you run this test you will get an error, as the StaticQuery in the `Layout` c
 ```js:title=src/__tests__/index.js
 import React from "react"
 import renderer from "react-test-renderer"
-import { StaticQuery } from "gatsby"
+import { useStaticQuery } from "gatsby"
 import Index from "../pages/index"
 
 beforeEach(() => {
-  StaticQuery.mockImplementationOnce(({ render }) =>
-    render({
-      site: {
-        siteMetadata: {
-          title: `Default Starter`,
-        },
+  useStaticQuery.mockImplementation(() => ({
+    site: {
+      siteMetadata: {
+        title: `Default Starter`,
       },
-    })
-  )
+    },
+  }))
 })
 
 describe("Index", () =>
